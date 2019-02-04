@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Layout from './hoc/Layout/Layout';
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import CheckOut from './containers/CheckOut/CheckOut';
+import {Route , Switch , Redirect} from 'react-router-dom';
+import Orders from './containers/Orders/Orders';
 
 class App extends Component {
+
+  // state={
+  //   show: true
+  // };
+
+
+  // componentDidMount(){
+  //   setTimeout(()=>{this.setState({show: false})}, 5000)
+  // }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+          <Layout>
+            <Switch >
+           {/* {this.state.show ?  <BurgerBuilder/>: null} */}
+           <Route path="/checkout" component={CheckOut}/>
+           <Route path="/orders" exact component={Orders}/>
+           <Route path="/" exact component={BurgerBuilder}/>
+          
+           </Switch>
+          </Layout>
       </div>
     );
   }

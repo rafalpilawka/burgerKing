@@ -1,0 +1,23 @@
+.Content{
+
+    text-align: center;
+}
+
+
+
+
+.Button{
+        align-content: center;
+        display: inline-flex;
+        font: inherit;
+        padding: 5px 5px;
+        margin: 100 5px;
+        width: auto;
+        border: 1px solid #AA6817;
+        cursor: pointer;
+        outline: none;
+}
+
+.Color{
+    color: darkred;
+}

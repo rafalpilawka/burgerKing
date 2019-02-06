@@ -15,26 +15,49 @@ class ContactData extends Component {
             elementType : 'input',
             elementConfig:{type: 'text', placeholder: 'Your name'},
             value: '',
+            validation: {
+                required: true
+            },
+            valid: false,
                     },
             street: {
                 elementType : 'input',
                 elementConfig:{type: 'text', placeholder: 'Your street'},
                 value: '',
+                validation: {
+                    required: true,
+   
+                },
+            valid: false,
                         },
-            number: {
+            postal: {
                 elementType : 'input',
                 elementConfig:{type: 'text', placeholder: 'ZIPCODE'},
                 value: '',
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5,
+                },
+            valid: false,
                         },
             country: {
                 elementType : 'input',
                 elementConfig:{type: 'text', placeholder: 'Country'},
                 value: '',
+                validation: {
+                    required: true
+                },
+            valid: false,
                         },
             email: {
                 elementType : 'input',
                 elementConfig:{type: 'email', placeholder: 'Your email'},
                 value: '',
+                validation: {
+                    required: true
+                },
+            valid: false,
                         },
             delivery: {
                 elementType : 'select',
@@ -51,6 +74,21 @@ class ContactData extends Component {
       totalPrice: 0,
     }
 
+    //CUSTOM REQUIRE CHECK VALIDATION
+    checkValidity(value, rules){
+        let isValid = true ;  
+        if(rules.required){
+            isValid = value.trim() !== '' && isValid
+        }
+        if (rules.minLength){
+            isValid = value.trim().length >= rules.minLength && isValid
+        }
+        if (rules.maxLength){
+            isValid = value.trim().length <= rules.maxLength && isValid
+        }
+        return isValid
+    }
+
     componentDidMount(){
    
         console.log('this.props: ', this.props);
@@ -59,9 +97,15 @@ class ContactData extends Component {
     orderHandler=(event)=>{
         event.preventDefault();
         //PREVENTING OF RELOADING PAGE IN FORM 
-
+            const formData = {};
+            for(let formElementIdentifier in this.state.orderForm ){
+                formData[formElementIdentifier]=this.state.orderForm[formElementIdentifier].value
+            }
           this.setState({loading: true});
           const order ={
+              ingredients: this.props.ingredients,
+              price: this.props.price,
+              orderData: formData
                         }
     const ingredient= this.props.ingredients;
     const price= this.props.totalPrice;
@@ -84,8 +128,11 @@ class ContactData extends Component {
         }
        const updatedFormElement= {...updatedOrderForm[inputIdentifier]}
        updatedFormElement.value = event.target.value;
+       updatedFormElement.valid =this.checkValidity
+                            (updatedFormElement.value , updatedFormElement.validation);
        updatedOrderForm[inputIdentifier]= updatedFormElement;
        this.setState({orderForm: updatedOrderForm});
+       console.log(updatedFormElement, updatedFormElement.value.length);
     }
 
     render(){
@@ -99,7 +146,7 @@ class ContactData extends Component {
             //CREATING ARRAY OF OBJECTS FOR FORM 
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                     {formElementsArray.map(formElement=>(
                         <Input 
                         key={formElement.id}

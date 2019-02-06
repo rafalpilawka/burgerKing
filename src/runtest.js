@@ -35,3 +35,6 @@ looper=(injection)=>{
 
 looper(obj);
 
+
+const number = 1200 ; 
+console.log(number);
